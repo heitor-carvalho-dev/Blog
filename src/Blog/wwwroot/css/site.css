@@ -1,0 +1,158 @@
+:root {
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --ink: #1b2430;
+    --muted: #5b6675;
+    --accent: #0b6e99;
+    --border: #d9dee5;
+    --code-bg: #e9edf2;
+
+    --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-text: Charter, "Bitstream Charter", "Sitka Text", Georgia, serif;
+    --font-code: ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #11161d;
+        --surface: #181f28;
+        --ink: #e6eaf0;
+        --muted: #9aa5b4;
+        --accent: #5cb8e0;
+        --border: #2a3441;
+        --code-bg: #1f2833;
+    }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { color-scheme: light dark; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main { flex: 1; padding-block: 2.5rem 4rem; }
+
+.container { width: min(100% - 2rem, 44rem); margin-inline: auto; }
+
+a { color: var(--accent); }
+a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+.skip-link {
+    position: absolute; left: -999px; top: 0;
+    background: var(--accent); color: var(--bg); padding: .5rem 1rem;
+}
+.skip-link:focus { left: 0; z-index: 10; }
+
+/* Header and footer */
+.site-header { border-bottom: 1px solid var(--border); background: var(--surface); }
+.header-inner { display: flex; justify-content: space-between; align-items: center; padding-block: 1rem; }
+.brand { font-weight: 700; font-size: 1.15rem; color: var(--ink); text-decoration: none; letter-spacing: -.01em; }
+.site-header nav a { color: var(--muted); text-decoration: none; margin-left: 1.25rem; }
+.site-header nav a:hover { color: var(--accent); }
+
+.site-footer { border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; padding-block: 1.5rem; }
+.site-footer p { margin: 0; }
+
+/* Homepage */
+.hero { margin-bottom: 3rem; }
+.hero h1 { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.1; letter-spacing: -.03em; margin: 0 0 1rem; }
+.hero p { font-family: var(--font-text); font-size: 1.15rem; color: var(--muted); margin: 0; max-width: 34rem; }
+
+.section-title { font-size: 1.1rem; margin: 0 0 1rem; padding-bottom: .5rem; border-bottom: 1px solid var(--border); }
+
+.post-list { list-style: none; margin: 0; padding: 0; }
+.post-list li + li { border-top: 1px solid var(--border); }
+
+.post-link { display: block; padding: 1.25rem .5rem; margin-inline: -.5rem; color: inherit; text-decoration: none; border-radius: 6px; }
+.post-link:hover { background: var(--surface); }
+.post-link time { color: var(--muted); font-size: .875rem; }
+.post-link h3 { margin: .15rem 0 .35rem; font-size: 1.35rem; letter-spacing: -.01em; color: var(--accent); }
+.post-link p { margin: 0; font-family: var(--font-text); color: var(--muted); }
+
+.empty { color: var(--muted); }
+
+/* Post page */
+.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); text-decoration: none; }
+.back::before { content: "\2190\00a0"; }
+.back:hover { color: var(--accent); }
+
+.post-header { margin-bottom: 2rem; }
+.post-header h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.15; letter-spacing: -.025em; margin: 0 0 .5rem; }
+.post-header time { color: var(--muted); font-size: .9rem; }
+
+.post-content { font-family: var(--font-text); font-size: 1.125rem; line-height: 1.75; }
+.post-content h2 { font-family: var(--font-ui); font-size: 1.5rem; letter-spacing: -.015em; margin: 2.25rem 0 .75rem; line-height: 1.25; }
+.post-content h3 { font-family: var(--font-ui); font-size: 1.2rem; margin: 1.75rem 0 .5rem; }
+.post-content p, .post-content ul, .post-content ol { margin: 0 0 1.25rem; }
+.post-content li { margin-bottom: .35rem; }
+
+.post-content code { font-family: var(--font-code); font-size: .88em; background: var(--code-bg); padding: .15em .4em; border-radius: 4px; }
+.post-content pre { background: var(--code-bg); padding: 1rem 1.25rem; border-radius: 8px; overflow-x: auto; margin: 0 0 1.5rem; line-height: 1.5; }
+.post-content pre code { background: none; padding: 0; font-size: .9rem; }
+
+.post-content blockquote { margin: 0 0 1.5rem; padding: .25rem 0 .25rem 1.25rem; border-left: 3px solid var(--accent); color: var(--muted); }
+.post-content blockquote p { margin: 0; }
+
+.post-content table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; font-family: var(--font-ui); font-size: .95rem; }
+.post-content th, .post-content td { border: 1px solid var(--border); padding: .5rem .75rem; text-align: left; }
+.post-content th { background: var(--surface); }
+
+.post-content img { max-width: 100%; height: auto; border-radius: 6px; }
+.post-content ul:has(input[type="checkbox"]) { list-style: none; padding-left: .25rem; }
+.post-content input[type="checkbox"] { margin-right: .5rem; }
+
+/* Theme cards (homepage): 2 per row */
+.theme-grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.theme-card {
+    position: relative;
+    isolation: isolate;
+    display: flex; flex-direction: column; justify-content: flex-end; gap: .15rem;
+    min-height: 12rem; height: 100%;
+    padding: 1.1rem;
+    border-radius: 10px;
+    overflow: hidden;
+    color: #fff;
+    text-decoration: none;
+    /* Default background, used when the theme has no image. The image is set via inline style. */
+    background-color: #14213d;
+    background-image: linear-gradient(135deg, #0b6e99, #14213d);
+    background-size: cover;
+    background-position: center;
+}
+
+/* Darkens the bottom so the text is always readable, whatever the image */
+.theme-card::before {
+    content: "";
+    position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(to top, rgba(8, 14, 24, .88) 0%, rgba(8, 14, 24, .2) 70%);
+}
+
+.theme-card:hover .theme-name { text-decoration: underline; text-underline-offset: 4px; }
+.theme-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.theme-name { font-size: 1.35rem; font-weight: 700; line-height: 1.2; letter-spacing: -.01em; }
+.theme-total { font-size: .875rem; opacity: .85; }
+
+@media (max-width: 30rem) {
+    .theme-grid { gap: .75rem; }
+    .theme-card { min-height: 9rem; padding: .85rem; }
+    .theme-name { font-size: 1.1rem; }
+}
+
+.theme-hero { margin-bottom: 2rem; }
+.theme-hero h1 { font-size: clamp(1.8rem, 5vw, 2.4rem); }

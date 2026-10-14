@@ -1,0 +1,110 @@
+@page "/"
+@inject PostService Posts
+
+<PageTitle>Useless Blog</PageTitle>
+
+@* Card styles are embedded here so they don't depend on site.css (note the doubled @@ in @@media) *@
+<style>
+    .theme-grid {
+        list-style: none; margin: 0; padding: 0;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .theme-grid > li { margin: 0; padding: 0; border: 0; }
+
+    a.theme-card {
+        position: relative;
+        isolation: isolate;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 12rem;
+        padding: 1.1rem;
+        border-radius: 10px;
+        overflow: hidden;
+        color: #fff;
+        text-decoration: none;
+        background-color: #14213d;
+        background-image: linear-gradient(135deg, #0b6e99, #14213d);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    /* Image layer: sits behind the dark overlay and is the only part that zooms */
+    a.theme-card::after {
+        content: "";
+        position: absolute; inset: 0; z-index: -2;
+        background-image: var(--theme-img, none);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: transform .5s ease;
+    }
+
+    a.theme-card:hover::after,
+    a.theme-card:focus-visible::after { transform: scale(1.08); }
+
+    a.theme-card::before {
+        content: "";
+        position: absolute; inset: 0; z-index: -1;
+        background: linear-gradient(to top, rgba(8, 14, 24, .88) 0%, rgba(8, 14, 24, .2) 70%);
+    }
+
+    a.theme-card:hover .theme-name { text-decoration: underline; text-underline-offset: 4px; }
+    a.theme-card:focus-visible { outline: 3px solid #5cb8e0; outline-offset: 3px; }
+
+    .theme-name { font-size: 1.35rem; font-weight: 700; line-height: 1.2; color: #fff; }
+    .theme-total { font-size: .875rem; opacity: .85; color: #fff; }
+
+    @@media (prefers-reduced-motion: reduce) {
+        a.theme-card::after { transition: none; }
+        a.theme-card:hover::after,
+        a.theme-card:focus-visible::after { transform: none; }
+    }
+
+    @@media (max-width: 30rem) {
+        .theme-grid { gap: .75rem; }
+        a.theme-card { min-height: 9rem; padding: .85rem; }
+        .theme-name { font-size: 1.1rem; }
+    }
+</style>
+
+<section class="hero">
+    <h1>A blog withuot any goal.</h1>
+    <p>Thoughts and documents writed by a random</p>
+</section>
+
+<section aria-labelledby="themes-title">
+    <h2 id="themes-title" class="section-title">Themes</h2>
+
+    @if (_themes.Count == 0)
+    {
+        <p class="empty">No themes yet. Add a .md file to Content/Posts with a "theme" field.</p>
+    }
+    else
+    {
+        <ul class="theme-grid">
+            @foreach (var theme in _themes)
+            {
+                <li>
+                    <a class="theme-card" href="/themes/@theme.Slug"
+                       style="@(theme.ImageUrl is null ? null : $"--theme-img: url('{theme.ImageUrl}')")">
+                        <span class="theme-name">@theme.Name</span>
+                        <span class="theme-total">@(theme.TotalPosts == 1 ? "1 post" : $"{theme.TotalPosts} posts")</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+</section>
+
+@code {
+    private IReadOnlyList<Theme> _themes = [];
+
+    protected override void OnInitialized() => _themes = Posts.GetThemes();
+}

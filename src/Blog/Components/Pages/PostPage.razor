@@ -1,0 +1,38 @@
+@page "/posts/{Slug}"
+@inject PostService Posts
+
+@if (_post is null)
+{
+    <PageTitle>Post not found – Useless Blog</PageTitle>
+    <section class="hero">
+        <h1>Post not found</h1>
+        <p>This address does not exist. <a href="/">Back to home</a>.</p>
+    </section>
+}
+else
+{
+    <PageTitle>@_post.Title – Useless Blog</PageTitle>
+
+    <article class="post">
+        <a class="back" href="/themes/@_post.ThemeSlug">@_post.ThemeName</a>
+
+        <header class="post-header">
+            <h1>@_post.Title</h1>
+            <time datetime="@_post.Date.ToString("yyyy-MM-dd")">
+                @_post.Date.ToString("MMMM d, yyyy", new System.Globalization.CultureInfo("en-US"))
+            </time>
+        </header>
+
+        <div class="post-content">
+            @((MarkupString)_post.Html)
+        </div>
+    </article>
+}
+
+@code {
+    [Parameter] public string Slug { get; set; } = "";
+
+    private Models.Post? _post;
+
+    protected override void OnParametersSet() => _post = Posts.GetBySlug(Slug);
+}

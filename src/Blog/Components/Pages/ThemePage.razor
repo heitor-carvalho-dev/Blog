@@ -1,0 +1,50 @@
+@page "/themes/{ThemeSlug}"
+@inject PostService Posts
+
+@if (_theme is null)
+{
+    <PageTitle>Theme not found – Useless Blog</PageTitle>
+    <section class="hero">
+        <h1>Theme not found</h1>
+        <p>This theme does not exist. <a href="/">See all themes</a>.</p>
+    </section>
+}
+else
+{
+    <PageTitle>@_theme.Name – Useless Blog</PageTitle>
+
+    <a class="back" href="/">All themes</a>
+
+    <section class="hero theme-hero">
+        <h1>@_theme.Name</h1>
+        <p>@(_theme.TotalPosts == 1 ? "1 post in this theme." : $"{_theme.TotalPosts} posts in this theme.")</p>
+    </section>
+
+    <ul class="post-list">
+        @foreach (var post in _posts)
+        {
+            <li>
+                <a class="post-link" href="/posts/@post.Slug">
+                    <time datetime="@post.Date.ToString("yyyy-MM-dd")">
+                        @post.Date.ToString("MMMM d, yyyy", new System.Globalization.CultureInfo("en-US"))
+                    </time>
+                    <h3>@post.Title</h3>
+                    <p>@post.Summary</p>
+                </a>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter] public string ThemeSlug { get; set; } = "";
+
+    private Theme? _theme;
+    private IReadOnlyList<Post> _posts = [];
+
+    protected override void OnParametersSet()
+    {
+        _theme = Posts.GetTheme(ThemeSlug);
+        _posts = _theme is null ? [] : Posts.GetByTheme(ThemeSlug);
+    }
+}
